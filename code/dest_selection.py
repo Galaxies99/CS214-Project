@@ -1,13 +1,14 @@
 import csvreader
+import numpy as np
 import matplotlib.pyplot as plt
 
 
 if __name__ == '__main__':
     dest_cnt = {}
-    dat = csvreader.csv_reader_no_headers("../data/chengdu_order/order_20161105")
+    dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
     for line in dat:
-        dest_longitude = float(line[3])
-        dest_latitude = float(line[4])
+        dest_longitude = float(line[5])
+        dest_latitude = float(line[6])
 
         dest_brick_lon = int(dest_longitude * 500)
         dest_brick_lat = int(dest_latitude * 500)
@@ -29,7 +30,7 @@ if __name__ == '__main__':
     dest_lat = []
 
     for item in dest:
-        if item[0] > 100:
+        if item[0] > 500:
             dest_lon.append(item[1] / 500.0)
             dest_lat.append(item[2] / 500.0)
 
