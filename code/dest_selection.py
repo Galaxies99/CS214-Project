@@ -1,4 +1,5 @@
 import csvreader
+import numpy as np
 import matplotlib.pyplot as plt
 import time
 
@@ -22,13 +23,23 @@ def datetime_timestamp(dt):
 
 if __name__ == '__main__':
     dest_cnt = {}
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+>>>>>>> Stashed changes
     dat1 = csvreader.csv_reader_no_headers("D:\Algorithm and Complexity Group Project\order_20161105")
     dat2 = csvreader.csv_reader_no_headers("D:\Algorithm and Complexity Group Project\order_20161106")
     dat3 = csvreader.csv_reader_no_headers("D:\Algorithm and Complexity Group Project\order_20161107")
     dat = dat1 + dat2 + dat3
+<<<<<<< Updated upstream
+=======
+=======
+    dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
+>>>>>>> d81641c0e5cc6207abdcf6a008d2872513b37669
+>>>>>>> Stashed changes
     for line in dat:
-        dest_longitude = float(line[3])
-        dest_latitude = float(line[4])
+        dest_longitude = float(line[5])
+        dest_latitude = float(line[6])
 
         dest_brick_lon = int(dest_longitude * 500)
         dest_brick_lat = int(dest_latitude * 500)
@@ -57,7 +68,7 @@ if __name__ == '__main__':
     dest_lat = []
 
     for item in dest:
-        if item[0] > 100:
+        if item[0] > 500:
             dest_lon.append(item[1] / 500.0)
             dest_lat.append(item[2] / 500.0)
 
