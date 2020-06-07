@@ -13,9 +13,9 @@ if __name__ == '__main__':
     ak = '???????????????' # Please fill in your AK code
 
     addr_list = []
-    count = 0
+    cnt = 0
     for line in dat:
-        count += 1
+        cnt += 1
         addr = line[0]
         pos = addr.find('] ')
         addr = addr[pos + 2:]
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         lng = js["result"]["location"]["lng"]
 
         addr_list.append([lat, lng])
-        print(count)
+        print(cnt)
 
     with open('../data/hotel_address_lat_lng.csv', "w", newline='') as csv_file:
         csv_writer = csv.writer(csv_file, dialect='excel')
