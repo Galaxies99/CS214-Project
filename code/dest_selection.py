@@ -1,4 +1,5 @@
 import csvreader
+import csv
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -87,7 +88,6 @@ if __name__ == '__main__':
 
     pre_final_list = []
 
-    dest_num = 0
     for item in dest:
         if item[0] >= 0.4:
             pre_final_list.append([item[1], item[2]])
@@ -102,10 +102,13 @@ if __name__ == '__main__':
     dest_lon = []
     dest_lat = []
 
+    out = open('../data/destination.csv','a', newline='')
+    csv_write = csv.writer(out,dialect='excel')
     for item in center:
-        print(item[0], item[1])
+        print(item[0] / 500.0, item[1] / 500.0)
         dest_lon.append(item[0] / 500.0)
         dest_lat.append(item[1] / 500.0)
+        csv_write.writerow(item)
 
     print('total', len(dest_lon), 'possible destinations.')
 
