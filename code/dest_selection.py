@@ -1,4 +1,10 @@
 import csvreader
+<<<<<<< Updated upstream
+=======
+import csv
+import math
+import numpy as np
+>>>>>>> Stashed changes
 import matplotlib.pyplot as plt
 import time
 
@@ -18,8 +24,16 @@ def datetime_timestamp(dt):
 
 if __name__ == '__main__':
     dest_cnt = {}
+<<<<<<< Updated upstream
     dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
     
+=======
+    hotel_cnt = {}
+    dat = csvreader.csv_reader_no_headers('D:\Algorithm and Complexity Group Project\order_20161105')
+    hotel_dat = csvreader.csv_reader_no_headers('../data/hotel_address_lat_lng.csv')
+
+    # Analyze order destination.
+>>>>>>> Stashed changes
     for line in dat:
         dest_longitude = float(line[5])
         dest_latitude = float(line[6])
@@ -48,12 +62,22 @@ if __name__ == '__main__':
     dest_lon = []
     dest_lat = []
 
+<<<<<<< Updated upstream
     for item in dest:
         if item[0] > 500:
             dest_lon.append(item[1] / 500.0)
             dest_lat.append(item[2] / 500.0)
 
         print('longitude =', item[1] / 500.0, 'latitude =', item[2] / 500.0, 'count =', item[0])
+=======
+    out = open('destination.csv','a', newline='')
+    csv_write = csv.writer(out,dialect='excel')
+    for item in center:
+        print(item[0] / 500.0, item[1] / 500.0)
+        dest_lon.append(item[0] / 500.0)
+        dest_lat.append(item[1] / 500.0)
+        csv_write.writerow(item)
+>>>>>>> Stashed changes
 
     print("total =" len(dest_lon))
 
