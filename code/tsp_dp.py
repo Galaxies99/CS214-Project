@@ -38,18 +38,18 @@ def TSP_solver(n, dist):
 
 
 if __name__ == '__main__':
-    n = 15 + 1
+    N = 15 + 1
 
     cx = [2.5, 1.2, 8.7, 3.6, -5.5, -6.6, 0.18, 12.5, 22.5, 1.61, 2.1, 0, 9.2, -1, -5, 21]
     cy = [4.0, -2.4, 1.2, 12.1, 0.94, -12.6, 5.219, 14.3609, -5.26, 4.5, -5.6, 25, -32, 7, -8, 35]
 
-    dist = np.zeros((n, n))
+    Dist = np.zeros((N, N))
 
-    for i in range(n):
-        for j in range(n):
-            dist[i][j] = math.sqrt((cx[i] - cx[j]) ** 2 + (cy[i] - cy[j]) ** 2)
+    for ii in range(N):
+        for jj in range(N):
+            Dist[ii][jj] = math.sqrt((cx[ii] - cx[jj]) ** 2 + (cy[ii] - cy[jj]) ** 2)
 
-    ans, route = TSP_solver(n, dist)
+    ans, route = TSP_solver(N, Dist)
 
     print('ans =', ans)
     print('route =', route)

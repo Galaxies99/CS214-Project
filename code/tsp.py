@@ -6,12 +6,20 @@ import math
 D = 18
 
 
-def tsp(n, cities):
+def tsp(n, dist):
+    if n <= D:
+        return tsp_dp.TSP_solver(n, dist)
+    else:
+        return tsp_gene.TSP_solver(n, dist)
+
+
+def tsp_coordinates(n, coordinates):
     dist = np.zeros((n, n))
 
     for i in range(n):
         for j in range(n):
-            dist[i][j] = math.sqrt((cities[i][0] - cities[j][0]) ** 2 + (cities[i][1] - cities[j][1]) ** 2)
+            dist[i][j] = math.sqrt((coordinates[i][0] - coordinates[j][0]) ** 2 +
+                                   (coordinates[i][1] - coordinates[j][1]) ** 2)
 
     if n <= D:
         return tsp_dp.TSP_solver(n, dist)
