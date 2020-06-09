@@ -1,12 +1,14 @@
 import csvreader
-<<<<<<< Updated upstream
-=======
 import csv
 import math
 import numpy as np
->>>>>>> Stashed changes
 import matplotlib.pyplot as plt
 import time
+import kmeans
+
+K = 50
+beta_d = 0.6
+beta_h = 0.4
 
 
 def timestamp_datetime(value):
@@ -24,16 +26,11 @@ def datetime_timestamp(dt):
 
 if __name__ == '__main__':
     dest_cnt = {}
-<<<<<<< Updated upstream
-    dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
-    
-=======
     hotel_cnt = {}
-    dat = csvreader.csv_reader_no_headers('D:\Algorithm and Complexity Group Project\order_20161105')
+    dat = csvreader.csv_reader_no_headers('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105')
     hotel_dat = csvreader.csv_reader_no_headers('../data/hotel_address_lat_lng.csv')
 
     # Analyze order destination.
->>>>>>> Stashed changes
     for line in dat:
         dest_longitude = float(line[5])
         dest_latitude = float(line[6])
@@ -52,34 +49,68 @@ if __name__ == '__main__':
             else:
                 dest_cnt[index] += 1
 
-    dest = []
+    # Analyze hotel data
+    valid_cnt = 0
+    for line in hotel_dat:
+        hotel_lat = float(line[0])
+        hotel_lon = float(line[1])
+        if hotel_lon < 103.9 or hotel_lon > 104.2 or hotel_lat < 30.55 or hotel_lat > 30.775:
+            continue
+        valid_cnt += 1
+        hotel_brick_lon = int(hotel_lon * 500)
+        hotel_brick_lat = int(hotel_lat * 500)
+        index = str(hotel_brick_lon) + '.' + str(hotel_brick_lat)
+        if hotel_cnt.get(index) is None:
+            hotel_cnt[index] = 1
+        else:
+            hotel_cnt[index] += 1
+
+    # Combine
+    cnt = {}
     for key in dest_cnt.keys():
-        dest_brick_lon, dest_brick_lat = key.split('.')
-        dest.append([dest_cnt[key], int(dest_brick_lon), int(dest_brick_lat)])
+        res = dest_cnt[key]
+        if res >= 50:
+            res = 50
+        cnt[key] = beta_d * res / 50
+
+    for key in hotel_cnt.keys():
+        if cnt.get(key) is None:
+            cnt[key] = beta_h / (1 + math.exp(-hotel_cnt[key]))
+        else:
+            cnt[key] += beta_h / (1 + math.exp(-hotel_cnt[key]))
+
+    dest = []
+    for key in cnt.keys():
+        brick_lon, brick_lat = key.split('.')
+        dest.append([cnt[key], int(brick_lon), int(brick_lat)])
 
     dest.sort()
+
+    pre_final_list = []
+
+    for item in dest:
+        if item[0] >= 0.4:
+            pre_final_list.append([item[1], item[2]])
+            print('longitude =', item[1] / 500.0, 'latitude =', item[2] / 500.0, 'count =', item[0])
+            dest_num += 1
+
+    min_arg = [51975, 15275]
+    max_arg = [52087, 15400]
+
+    center, _ = kmeans.kmeans(K, 2, min_arg, max_arg, pre_final_list)
 
     dest_lon = []
     dest_lat = []
 
-<<<<<<< Updated upstream
-    for item in dest:
-        if item[0] > 500:
-            dest_lon.append(item[1] / 500.0)
-            dest_lat.append(item[2] / 500.0)
-
-        print('longitude =', item[1] / 500.0, 'latitude =', item[2] / 500.0, 'count =', item[0])
-=======
-    out = open('destination.csv','a', newline='')
+    out = open('../data/destination.csv','a', newline='')
     csv_write = csv.writer(out,dialect='excel')
     for item in center:
         print(item[0] / 500.0, item[1] / 500.0)
         dest_lon.append(item[0] / 500.0)
         dest_lat.append(item[1] / 500.0)
         csv_write.writerow(item)
->>>>>>> Stashed changes
 
-    print("total =" len(dest_lon))
+    print('total', len(dest_lon), 'possible destinations.')
 
     plt.plot(dest_lon, dest_lat, 'o', markersize=2)
     plt.show()
