@@ -6,6 +6,7 @@ from pyecharts import options as opts
 import math
 import time
 
+
 def timestamp_datetime(value):
     format = '%Y-%m-%d %H:%M:%S'
     value = time.localtime(int(value))
@@ -18,9 +19,10 @@ def datetime_timestamp(dt):
     s = time.mktime(time.strptime(dt, '%Y-%m-%d %H:%M:%S'))
     return int(s)
 
+
 if __name__ == '__main__':
     dest_cnt = {}
-    dat = csvreader.csv_reader_no_headers("D:\Algorithm and Complexity Group Project\order_20161105")
+    dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
     for line in dat:
         dest_longitude = float(line[3])
         dest_latitude = float(line[4])
