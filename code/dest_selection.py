@@ -1,33 +1,24 @@
 import csvreader
+import order_filter
 import csv
 import math
-import numpy as np
 import matplotlib.pyplot as plt
-import time
 import kmeans
 
 K = 50
 beta_d = 0.6
 beta_h = 0.4
+departure_radius = 3
+lon_km = 111
+lat_km = 96
 
 
-def timestamp_datetime(value):
-    format = '%Y-%m-%d %H:%M:%S'
-    value = time.localtime(int(value))
-    dt = time.strftime(format, value)
-    return dt
-
-
-def datetime_timestamp(dt):
-    time.strptime(dt, '%Y-%m-%d %H:%M:%S')
-    s = time.mktime(time.strptime(dt, '%Y-%m-%d %H:%M:%S'))
-    return int(s)
-
-
-if __name__ == '__main__':
+def selection(re):
     dest_cnt = {}
     hotel_cnt = {}
-    dat = csvreader.csv_reader_no_headers('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105')
+    dat = order_filter.filter_night('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105')
+    departure_dat = csvreader.csv_reader_no_headers('../data/departure.csv')
+    departure = [float(departure_dat[0][0]), float(departure_dat[0][1])]
     hotel_dat = csvreader.csv_reader_no_headers('../data/hotel_address_lat_lng.csv')
 
     # Analyze order destination.
@@ -38,16 +29,11 @@ if __name__ == '__main__':
         dest_brick_lon = int(dest_longitude * 500)
         dest_brick_lat = int(dest_latitude * 500)
 
-        s = timestamp_datetime(int(line[1]))
-        s = s[11:]
-        s1 = '23:00:00'
-        s2 = '06:00:00'
-        if s >= s1 or s <= s2:
-            index = str(dest_brick_lon) + '.' + str(dest_brick_lat)
-            if dest_cnt.get(index) is None:
-                dest_cnt[index] = 1
-            else:
-                dest_cnt[index] += 1
+        index = str(dest_brick_lon) + '.' + str(dest_brick_lat)
+        if dest_cnt.get(index) is None:
+            dest_cnt[index] = 1
+        else:
+            dest_cnt[index] += 1
 
     # Analyze hotel data
     valid_cnt = 0
@@ -89,10 +75,11 @@ if __name__ == '__main__':
     pre_final_list = []
 
     for item in dest:
+        if re and (lon_km * (departure[0] - item[1] / 500.0)) ** 2 + (lat_km * (departure[1] - item[2] / 500.0)) ** 2 <= departure_radius ** 2:
+            continue
         if item[0] >= 0.4:
             pre_final_list.append([item[1], item[2]])
             print('longitude =', item[1] / 500.0, 'latitude =', item[2] / 500.0, 'count =', item[0])
-            dest_num += 1
 
     min_arg = [51975, 15275]
     max_arg = [52087, 15400]
@@ -102,15 +89,20 @@ if __name__ == '__main__':
     dest_lon = []
     dest_lat = []
 
-    out = open('../data/destination.csv','a', newline='')
-    csv_write = csv.writer(out,dialect='excel')
-    for item in center:
-        print(item[0] / 500.0, item[1] / 500.0)
-        dest_lon.append(item[0] / 500.0)
-        dest_lat.append(item[1] / 500.0)
-        csv_write.writerow(item)
+    with open('../data/destination.csv', 'w', newline='') as out:
+        csv_write = csv.writer(out, dialect='excel')
+        for item in center:
+            print(item[0] / 500.0, item[1] / 500.0)
+            dest_lon.append(item[0] / 500.0)
+            dest_lat.append(item[1] / 500.0)
+            csv_write.writerow([item[0] / 500.0, item[1] / 500.0])
 
     print('total', len(dest_lon), 'possible destinations.')
 
     plt.plot(dest_lon, dest_lat, 'o', markersize=2)
+    plt.savefig('../data/destination.pdf', dpi=300)
     plt.show()
+
+
+if __name__ == '__main__':
+    selection(0)

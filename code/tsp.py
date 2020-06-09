@@ -10,7 +10,7 @@ def tsp(n, dist):
     if n <= D:
         return tsp_dp.TSP_solver(n, dist)
     else:
-        return tsp_gene.TSP_solver(n, dist)
+        return tsp_gene.TSP_solver(n, dist, False)
 
 
 def tsp_coordinates(n, coordinates):
@@ -24,7 +24,7 @@ def tsp_coordinates(n, coordinates):
     if n <= D:
         return tsp_dp.TSP_solver(n, dist)
     else:
-        return tsp_gene.TSP_solver(n, dist)
+        return tsp_gene.TSP_solver(n, dist, False)
 
 
 def tsp_lat_lng(n, lat, lng):
@@ -37,7 +37,7 @@ def tsp_lat_lng(n, lat, lng):
     if n <= D:
         return tsp_dp.TSP_solver(n, dist)
     else:
-        return tsp_gene.TSP_solver(n, dist)
+        return tsp_gene.TSP_solver(n, dist, False)
 
 
 if __name__ == '__main__':

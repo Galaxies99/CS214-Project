@@ -10,6 +10,7 @@ def csv_reader_without_headers(filename):
             dat.append(row)
     return dat
 
+
 def csv_reader_with_headers(filename):
     dat = []
     headers = []

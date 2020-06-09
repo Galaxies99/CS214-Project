@@ -24,42 +24,47 @@ class ODRPOptSolver(object):
     best_profit = -1e20    # best profit.
     best_b = np.array([])  # best order dispatch plan.
     best_route = []        # best TSP route.
+    LL = 0                 # The limit of buses (lower bound)
 
     def __init__(self, n, m, k, L, dest, coordinates, pb, pc, cr, cb):
         self.n = n
         self.m = m
         self.k = k
         self.L = L
+        self.LL = int(cr / 20)
         self.dest = dest
         self.coordinates = coordinates
-        self.dist = np.array((k, k))
+        self.dist = np.zeros((k, k))
         self.calcDistance()
         self.pb = pb
         self.pc = pc
         self.cr = cr
         self.cb = cb
-        self.price = np.array(n)
+        self.p = np.zeros(n)
         self.calcPrice()
-        self.b = np.array(n)
-        for i in range(m):
+        self.b = np.zeros(n)
+        for i in range(m + 1):
             self.B.append([])
             self.D.append([])
 
     def calcDistance(self):
         for i in range(self.k):
             for j in range(self.k):
-                self.dist[i, j] = math.sqrt((self.coordinates[i][0] - self.coordinates[j][0]) ** 2 +
+                self.dist[i][j] = math.sqrt((self.coordinates[i][0] - self.coordinates[j][0]) ** 2 +
                                             (self.coordinates[i][1] - self.coordinates[j][1]) ** 2)
 
     def enumerateOrder(self, i, cur_j):
         if i == self.n:
+            for j in range(1, cur_j):
+                if len(self.B[j]) < self.LL:
+                    return
             profit, route = self.calcProfit(cur_j)
             if profit > self.best_profit:
                 self.best_profit = profit
                 self.best_b = np.copy(self.b)
                 self.best_route = copy.deepcopy(route)
             return
-        for j in range(min(cur_j + 1 + 1, self.m + 1)):
+        for j in range(1, min(cur_j + 1 + 1, self.m + 1)):
             if len(self.B[j]) == self.L:      # already full
                 continue
             self.b[i] = j
@@ -69,6 +74,10 @@ class ODRPOptSolver(object):
             else:
                 self.enumerateOrder(i + 1, cur_j)
             self.B[j].pop()
+        self.b[i] = 0
+        self.B[0].append(i)
+        self.enumerateOrder(i + 1, cur_j)
+        self.B[0].pop()
 
     def calcProfit(self, bus_num):
         profit = 0
@@ -78,7 +87,7 @@ class ODRPOptSolver(object):
         profit -= bus_num * self.cr
         coord = []
         route = []
-        for j in range(bus_num):
+        for j in range(1, bus_num + 1):
             for passenger in self.B[j]:
                 if self.dest[passenger] not in self.D[j]:
                     self.D[j].append(self.dest[passenger])
@@ -88,6 +97,9 @@ class ODRPOptSolver(object):
                 coord.append(self.coordinates[destination])
             bus_length, bus_route = tsp.tsp_coordinates(len(coord), coord)
             profit -= bus_length * self.cb
+            for i, item in enumerate(bus_route):
+                if item != 0:
+                    bus_route[i] = self.D[j][item - 1]
             route.append(bus_route)
         return profit, route
 

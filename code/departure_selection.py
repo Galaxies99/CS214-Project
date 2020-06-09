@@ -1,55 +1,38 @@
-import csvreader
-import numpy as np
-import matplotlib.pyplot as plt
+import order_filter
+import csv
 from pyecharts.charts import HeatMap
 from pyecharts import options as opts
-import math
-import time
-
-
-def timestamp_datetime(value):
-    format = '%Y-%m-%d %H:%M:%S'
-    value = time.localtime(int(value))
-    dt = time.strftime(format, value)
-    return dt
-
-
-def datetime_timestamp(dt):
-    time.strptime(dt, '%Y-%m-%d %H:%M:%S')
-    s = time.mktime(time.strptime(dt, '%Y-%m-%d %H:%M:%S'))
-    return int(s)
 
 
 if __name__ == '__main__':
-    dest_cnt = {}
-    dat = csvreader.csv_reader_no_headers("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
+    departure_cnt = {}
+    dat = order_filter.filter_night("../../CS214-CourseData/Projects/data/chengdu_order/order_20161105")
     for line in dat:
-        dest_longitude = float(line[3])
-        dest_latitude = float(line[4])
+        departure_longitude = float(line[3])
+        departure_latitude = float(line[4])
 
-        dest_brick_lon = int(dest_longitude * 50)
-        dest_brick_lat = int(dest_latitude * 50)
+        departure_brick_lon = int(departure_longitude * 50)
+        departure_brick_lat = int(departure_latitude * 50)
 
-        s = timestamp_datetime(int(line[1]))
-        s = s[11:]
-        s1 = '23:00:00'
-        s2 = '06:00:00'
-        if s >= s1 or s <= s2:
-            index = str(dest_brick_lon) + '.' + str(dest_brick_lat)
-            if dest_cnt.get(index) is None:
-                dest_cnt[index] = 1
-            else:
-                dest_cnt[index] += 1
+        index = str(departure_brick_lon) + '.' + str(departure_brick_lat)
+        if departure_cnt.get(index) is None:
+            departure_cnt[index] = 1
+        else:
+            departure_cnt[index] += 1
 
-    dest = []
-    for key in dest_cnt.keys():
-        dest_brick_lon, dest_brick_lat = key.split('.')
-        dest.append([dest_cnt[key], int(dest_brick_lon), int(dest_brick_lat)])
+    departure = []
+    for key in departure_cnt.keys():
+        departure_brick_lon, departure_brick_lat = key.split('.')
+        departure.append([departure_cnt[key], int(departure_brick_lon), int(departure_brick_lat)])
 
-    dest.sort()
+    departure.sort()
+    departure.reverse()
 
-    for item in dest:
-        print('longitude =', item[1] / 50.0, 'latitude =', item[2] / 50.0, 'count =', item[0])
+    with open('../data/departure.csv', 'w', newline='') as out:
+        csv_write = csv.writer(out, dialect='excel')
+        for item in departure:
+            print('longitude =', item[1] / 50.0, 'latitude =', item[2] / 50.0, 'count =', item[0])
+            csv_write.writerow([item[1] / 50.0, item[2] / 50.0, item[0]])
 
     x_axis = []
     y_axis = []
@@ -60,7 +43,7 @@ if __name__ == '__main__':
 
     data = [[i, j, 0] for i in range(len(x_axis)) for j in range(len(y_axis))]
 
-    for item in dest:
+    for item in departure:
         if item[0] < 5:
             continue
         ix = int((item[1] / 50.0 - 103.8) / 0.02)
@@ -88,5 +71,5 @@ if __name__ == '__main__':
             title_opts=opts.TitleOpts(title="HeatMap"),
             visualmap_opts=opts.VisualMapOpts(),
         )
-        .render("heatmap.html")
+        .render("../data/heatmap.html")
     )

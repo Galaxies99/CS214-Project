@@ -112,9 +112,8 @@ class TSP(object):
                 k += 1
         return max_gene
 
-    def evolution(self):
+    def evolution(self, output):
         for epoch in range(self.epoch_num):
-            print('epoch =', epoch)
             best_index = np.argmax(self.fitness)
             worst_index = np.argmin(self.fitness)
             local_best_gen = self.pop[best_index]
@@ -130,8 +129,10 @@ class TSP(object):
             else:
                 self.pop[worst_index] = self.best_gen
 
-            print('|-- best dist =', self.best_dis)
-            print('|-- best gen =', self.best_gen)
+            if output:
+                print('epoch =', epoch)
+                print('|-- best dist =', self.best_dis)
+                print('|-- best gen =', self.best_gen)
 
             self.pop = self.select_pop(self.pop, self.fitness)
             self.fitness = self.calc_fitness(self.pop)
@@ -146,10 +147,10 @@ class TSP(object):
             self.best_dis = self.calc_dist(self.best_gen)
 
 
-def TSP_solver(n, dist):
+def TSP_solver(n, dist, output):
     tsp = TSP(n, dist, 0.6, 0.1, 100, 200)
     tsp.init()
-    tsp.evolution()
+    tsp.evolution(output)
     t_route = list(tsp.best_gen)
     pos = t_route.index(0)
     res_route = t_route[pos:] + t_route[:pos]
@@ -169,7 +170,7 @@ if __name__ == '__main__':
         for jj in range(N):
             Dist[ii][jj] = math.sqrt((cx[ii] - cx[jj]) ** 2 + (cy[ii] - cy[jj]) ** 2)
 
-    ans, route = TSP_solver(N, Dist)
+    ans, route = TSP_solver(N, Dist, True)
 
     print('ans =', ans)
     print('route =', route)
