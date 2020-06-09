@@ -6,18 +6,19 @@ def TSP_solver(n, dist):
     state_num = 2 ** n
     dp = np.ones((state_num, n)) * 1e20
     path = np.zeros((state_num, n), dtype=np.int)
-    dp[1][0] = 0
     for st in range(state_num):
         for i in range(n):
-            if dp[st][i] != 1e20:
-                for j in range(n):
-                    if st & (1 << j):
-                        continue
-                    # s -~-> i -> j
-                    new_st = st | (1 << j)
-                    if dp[st][i] + dist[i][j] < dp[new_st][j]:
-                        dp[new_st][j] = dp[st][i] + dist[i][j]
-                        path[new_st][j] = i
+            if st & (1 << i) == 0:
+                continue
+            if st == 1 and i == 0:
+                dp[st][i] = 0
+                continue
+            for j in range(n):
+                if j == i or st & (1 << j) == 0:
+                    continue
+                if dp[st ^ (1 << i)][j] + dist[j][i] < dp[st][i]:
+                    dp[st][i] = dp[st ^ (1 << i)][j] + dist[j][i]
+                    path[st][i] = j
     ans = 1e20
     cur = 0
     for i in range(n):
