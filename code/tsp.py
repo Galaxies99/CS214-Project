@@ -27,6 +27,17 @@ def tsp_coordinates(n, coordinates):
         return tsp_gene.TSP_solver(n, dist, False)
 
 
+def tsp_coordinates_opt(n, coordinates):
+    dist = np.zeros((n, n))
+
+    for i in range(n):
+        for j in range(n):
+            dist[i][j] = math.sqrt((coordinates[i][0] - coordinates[j][0]) ** 2 +
+                                   (coordinates[i][1] - coordinates[j][1]) ** 2)
+
+    return tsp_dp.TSP_solver(n, dist)
+
+
 def tsp_lat_lng(n, lat, lng):
     dist = np.zeros((n, n))
 
