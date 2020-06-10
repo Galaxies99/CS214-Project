@@ -3,7 +3,7 @@ import tsp_gene
 import numpy as np
 import math
 
-D = 18
+D = 8
 
 
 def tsp(n, dist):
