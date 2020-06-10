@@ -91,11 +91,12 @@ class ODRPGDPSolver(object):
             lst = tr[cur]
             bus_profit.append(pf[lst + 1][cur])
             cur = lst
-        print(len(bus_profit))
         if len(bus_profit) > self.m:
             bus_profit.sort()
             bus_profit.reverse()
             bus_profit = bus_profit[:self.m]
+        while len(bus_profit) > 0 and bus_profit[len(bus_profit) - 1] < 0:
+            bus_profit.pop()
         total_profit = np.sum(bus_profit)
         return total_profit
 

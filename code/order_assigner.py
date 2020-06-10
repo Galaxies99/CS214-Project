@@ -3,7 +3,7 @@ import datahelper
 import csvreader
 
 
-departure_radius = 3
+departure_radius = 10
 lon_km = 111
 lat_km = 96
 
@@ -39,4 +39,4 @@ def assign(filename, time_l, time_r, m, L, pb, pc, cr, cb):
 
 
 if __name__ == '__main__':
-    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '23:00:00', '23:00:16', 1, 50, 1.2, 0.6, 150, 1.04)
+    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '23:00:00', '23:00:59', 3, 50, 5.1, 0.92, 150, 1.8)

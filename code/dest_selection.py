@@ -8,7 +8,7 @@ import kmeans
 K = 50
 beta_d = 0.6
 beta_h = 0.4
-departure_radius = 3
+departure_radius = 10
 lon_km = 111
 lat_km = 96
 
@@ -105,4 +105,4 @@ def selection(re):
 
 
 if __name__ == '__main__':
-    selection(0)
+    selection(1)
