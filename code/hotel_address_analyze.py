@@ -1,7 +1,7 @@
 import csvreader
 import csv
 from urllib.request import urlopen
-from urllib.parse import quote, quote_plus
+from urllib.parse import quote
 import json
 import hashlib
 

@@ -28,7 +28,7 @@ class ODRPOptSolver(object):
     LL = 0                 # The limit of buses (lower bound).
     profit = 0             # Current profit.
 
-    def __init__(self, n, m, k, L, dest, coordinates, pb, pc, cr, cb):
+    def __init__(self, n, m, k, L, dest, coordinates, dist, pb, pc, cr, cb):
         self.n = n
         self.m = m
         self.k = k
@@ -36,8 +36,7 @@ class ODRPOptSolver(object):
         self.LL = int(cr / 20)
         self.dest = dest
         self.coordinates = coordinates
-        self.dist = np.zeros((k, k))
-        self.calcDistance()
+        self.dist = np.array(dist)
         self.pb = pb
         self.pc = pc
         self.cr = cr
@@ -49,12 +48,6 @@ class ODRPOptSolver(object):
         for i in range(m + 1):
             self.B.append([])
             self.D.append([])
-
-    def calcDistance(self):
-        for i in range(self.k):
-            for j in range(self.k):
-                self.dist[i][j] = math.sqrt((self.coordinates[i][0] - self.coordinates[j][0]) ** 2 +
-                                            (self.coordinates[i][1] - self.coordinates[j][1]) ** 2)
 
     def enumerateOrder(self, i, cur_j):
         if i == self.n:
@@ -91,17 +84,16 @@ class ODRPOptSolver(object):
 
     def calcProfit(self, bus_num, profit_t):
         profit = profit_t - bus_num * self.cr
-        coord = []
+        coord_id = []
         route = []
         for j in range(1, bus_num + 1):
             for passenger in self.B[j]:
                 if self.dest[passenger] not in self.D[j]:
                     self.D[j].append(self.dest[passenger])
-            coord.clear()
-            coord.append(self.coordinates[0])
-            for destination in self.D[j]:
-                coord.append(self.coordinates[destination])
-            bus_length, bus_route = tsp.tsp_coordinates_opt(len(coord), coord)
+            coord_id.clear()
+            coord_id.append(0)
+            coord_id.extend(self.D[j])
+            bus_length, bus_route = tsp.tsp_coordinates_id_opt(len(coord_id), coord_id)
             profit -= bus_length * self.cb
             for i, item in enumerate(bus_route):
                 if item != 0:
@@ -121,14 +113,14 @@ class ODRPOptSolver(object):
         return self.best_profit, self.best_route
 
 
-def solver(n, m, k, L, dest, coordinates, pb, pc, cr, cb):
-    odrp = ODRPOptSolver(n, m, k, L, dest, coordinates, pb, pc, cr, cb)
+def solver(n, m, k, L, dest, coordinates, dist, pb, pc, cr, cb):
+    odrp = ODRPOptSolver(n, m, k, L, dest, coordinates, dist, pb, pc, cr, cb)
     profit, route = odrp.solver()
     return profit, route
 
 
 if __name__ == '__main__':
-    _n, _m, _k, _L, _dest, _coordinates, _pb, _pc, _cr, _cb = datahelper.load_json('../data/order_data.json')
-    Profit, Route = solver(_n, _m, _k, _L, _dest, _coordinates, _pb, _pc, _cr, _cb)
+    _n, _m, _k, _L, _dest, _coordinates, _dist, _pb, _pc, _cr, _cb = datahelper.load_json('../data/order_data.json')
+    Profit, Route = solver(_n, _m, _k, _L, _dest, _coordinates, _dist, _pb, _pc, _cr, _cb)
     print('Profit =', Profit)
     print('Route =', Route)

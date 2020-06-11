@@ -35,8 +35,9 @@ def assign(filename, time_l, time_r, m, L, pb, pc, cr, cb):
         dest.append(pos)
 
     n = len(dest)
+
     datahelper.dump_json('../data/order_data.json', n, m, k, L, dest, coordinates, pb, pc, cr, cb)
 
 
 if __name__ == '__main__':
-    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '23:00:00', '23:00:59', 3, 50, 5.1, 0.92, 150, 1.8)
+    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '00:50:00', '00:59:59', 70, 20, 5.1, 0.56, 150, 1.8)

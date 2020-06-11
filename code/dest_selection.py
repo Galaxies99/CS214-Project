@@ -5,7 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import kmeans
 
-K = 50
+K = 30
 beta_d = 0.6
 beta_h = 0.4
 departure_radius = 10
