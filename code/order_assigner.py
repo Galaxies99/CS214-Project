@@ -40,4 +40,4 @@ def assign(filename, time_l, time_r, m, L, pb, pc, cr, cb):
 
 
 if __name__ == '__main__':
-    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '00:50:00', '00:59:59', 70, 20, 5.1, 0.56, 150, 1.8)
+    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '00:00:00', '00:09:59', 70, 20, 9.12, 0.56, 150, 1.8)
