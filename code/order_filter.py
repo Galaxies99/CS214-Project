@@ -41,13 +41,14 @@ def filter_day(filename):
     return out_dat
 
 
-def filter_time(filename, sl, sr):
+def filter_time(filename, date, sl, sr):
     dat = csvreader.csv_reader_no_headers(filename)
     out_dat = []
     for line in dat:
         s = timestamp_datetime(int(line[1]))
-        s = s[11:]
-        if sl <= s <= sr:
+        dat = s[:10]
+        tm = s[11:]
+        if sl <= tm <= sr and dat == date:
             out_dat.append(line)
     return out_dat
 

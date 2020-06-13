@@ -1,6 +1,7 @@
 import csvreader
 import json
 import numpy as np
+import time
 from urllib.request import urlopen
 
 
@@ -8,7 +9,7 @@ if __name__ == '__main__':
     dest_dat = csvreader.csv_reader_no_headers('../data/destination.csv')
     departure_dat = csvreader.csv_reader_no_headers('../data/departure.csv')
 
-    ak = '???????????????' # Please fill in your AK code
+    ak = '??????????????????' # Please fill in your AK code
 
     coordinates = [[float(departure_dat[0][0]), float(departure_dat[0][1])]]
 
@@ -32,6 +33,14 @@ if __name__ == '__main__':
                 uh = urlopen(uri)
                 data = uh.read().decode()
                 js = json.loads(data)
+                print(uri)
+                print(js)
+                if js['status'] != 0:
+                    time.sleep(5)
+                    uh = urlopen(uri)
+                    data = uh.read().decode()
+                    js = json.loads(data)
+
                 dist[i][j] = js['result'][0]['distance']['value'] / 1000
 
     dist_dict = {'dist': dist.tolist()}

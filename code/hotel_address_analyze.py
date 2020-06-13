@@ -10,7 +10,7 @@ if __name__ == '__main__':
     count = 0
 
     output = 'json'
-    ak = '???????????????' # Please fill in your AK code
+    ak = '???????????????????' # Please fill in your AK code
 
     addr_list = []
     cnt = 0
@@ -26,7 +26,6 @@ if __name__ == '__main__':
         addr = addr[: pos + 1]
         if addr == "":
             continue
-
         uri = 'http://api.map.baidu.com/geocoding/v3/?address=' + quote(addr) + '&output=json&ak=' + ak
 
         uh = urlopen(uri)

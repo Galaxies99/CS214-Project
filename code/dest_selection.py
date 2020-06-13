@@ -16,7 +16,7 @@ lat_km = 96
 def selection(re):
     dest_cnt = {}
     hotel_cnt = {}
-    dat = order_filter.filter_night('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105')
+    dat = order_filter.filter_night('../../CS214-CourseData/Projects/data/haikou_order/order_20171011_20171014.csv')
     departure_dat = csvreader.csv_reader_no_headers('../data/departure.csv')
     departure = [float(departure_dat[0][0]), float(departure_dat[0][1])]
     hotel_dat = csvreader.csv_reader_no_headers('../data/hotel_address_lat_lng.csv')
@@ -40,7 +40,7 @@ def selection(re):
     for line in hotel_dat:
         hotel_lat = float(line[0])
         hotel_lon = float(line[1])
-        if hotel_lon < 103.9 or hotel_lon > 104.2 or hotel_lat < 30.55 or hotel_lat > 30.775:
+        if hotel_lon < 109.4 or hotel_lon > 110.82 or hotel_lat < 19.6 or hotel_lat > 20.05:
             continue
         valid_cnt += 1
         hotel_brick_lon = int(hotel_lon * 500)
@@ -77,12 +77,12 @@ def selection(re):
     for item in dest:
         if re and (lon_km * (departure[0] - item[1] / 500.0)) ** 2 + (lat_km * (departure[1] - item[2] / 500.0)) ** 2 <= departure_radius ** 2:
             continue
-        if item[0] >= 0.4:
+        if item[0] >= 0.6:
             pre_final_list.append([item[1], item[2]])
             print('longitude =', item[1] / 500.0, 'latitude =', item[2] / 500.0, 'count =', item[0])
 
-    min_arg = [51975, 15275]
-    max_arg = [52087, 15400]
+    min_arg = [54700, 9800]
+    max_arg = [55410, 10025]
 
     center, _ = kmeans.kmeans(K, 2, min_arg, max_arg, pre_final_list)
 

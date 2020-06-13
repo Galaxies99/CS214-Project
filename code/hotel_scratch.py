@@ -8,7 +8,7 @@ total_page = 55
 if __name__ == '__main__':
     hotel = []
 
-    url = 'https://hotel.meituan.com/chengdu'
+    url = 'https://hotel.meituan.com/haikou'
     dcap = dict(DesiredCapabilities.PHANTOMJS)
     dcap['phantomjs.page.settings.userAgent'] = (
         'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, '

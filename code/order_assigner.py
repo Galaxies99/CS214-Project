@@ -8,8 +8,8 @@ lon_km = 111
 lat_km = 96
 
 
-def assign(filename, time_l, time_r, m, L, pb, pc, cr, cb):
-    dat = order_filter.filter_time(filename, time_l, time_r)
+def assign(filename, date, time_l, time_r, m, L, pb, pc, cr, cb):
+    dat = order_filter.filter_time(filename, date, time_l, time_r)
     dest_dat = csvreader.csv_reader_no_headers('../data/destination.csv')
     departure_dat = csvreader.csv_reader_no_headers('../data/departure.csv')
     coordinates = [[float(departure_dat[0][0]), float(departure_dat[0][1])]]
@@ -40,4 +40,4 @@ def assign(filename, time_l, time_r, m, L, pb, pc, cr, cb):
 
 
 if __name__ == '__main__':
-    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '00:00:00', '00:09:59', 70, 20, 9.12, 0.56, 150, 1.8)
+    assign('../../CS214-CourseData/Projects/data/chengdu_order/order_20161105', '2016-11-05', '23:00:00', '23:29:59', 300, 20, 9.12, 0.56, 150, 1.8)
