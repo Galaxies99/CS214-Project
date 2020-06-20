@@ -148,7 +148,7 @@ class TSP(object):
 
 
 def TSP_solver(n, dist, output):
-    tsp = TSP(n, dist, 0.6, 0.1, 30, 100)
+    tsp = TSP(n, dist, 0.6, 0.1, 100, 200)
     tsp.init()
     tsp.evolution(output)
     t_route = list(tsp.best_gen)
