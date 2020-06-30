@@ -1,5 +1,5 @@
 # CS214 Algorithm and Complexity Group Project
-Related report: **GDP: Greedy-based Dynamic Programming Algorithm - An effect solution to ODRP Problems**; The report is "Report.pdf" in this repository.
+Related report: **GDP: Greedy-based Dynamic Programming Algorithm - An effective solution to ODRP Problems**; The report is "Report.pdf" in this repository.
 
 Author: [Hongjie Fang](https://github.com/Galaxies99), [Peishen Yan](https://github.com/KoalaYan), [Chunyu Xue](https://github.com/DicardoX).
 
